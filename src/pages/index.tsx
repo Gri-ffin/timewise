@@ -27,7 +27,7 @@ export default function Home() {
 
         <section className="flex flex-col justify-center items-center">
           <h3 className="font-bold text-2xl my-10">But a glimpse on some features</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 place-items-start md:place-items-center gap-5 w-7/12">
+          <div className="grid grid-cols-1 md:grid-cols-2 place-items-start md:place-items-center gap-5 md:w-10/12 lg:w-7/12">
             <div className="space-y-5">
               <h6 className="font-semibold text-lg">Time tracking and Categorization</h6>
               <p className="text-gray-400">
