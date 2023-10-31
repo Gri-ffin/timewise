@@ -16,11 +16,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-        <div className={`${inter.className} text-white px-10 py-5`}>
-          <Component {...pageProps} />
-        </div>
-      </ThemeProvider>
+      <div className={`${inter.className} px-10 py-5`}>
+        <Component {...pageProps} />
+      </div>
     </SessionProvider>
   );
 };
