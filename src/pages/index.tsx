@@ -1,7 +1,11 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from 'next/link'
+
+import AuthButton from "~/components/AuthButton";
 
 export default function Home() {
+  const { data: sessionData } = useSession()
 
   return (
     <>
@@ -22,7 +26,16 @@ export default function Home() {
             Organize, manage, and optimize your time. Track every moment, from
             productive tasks to leisure, and unlock your full potential.
           </p>
-          <AuthButton />
+          {
+            sessionData ?
+              <Link
+                href='/dashboard/task'
+                className="rounded-xl full bg-blue-700/70 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+              >
+                Go to the dashboard
+              </Link> :
+              <AuthButton />
+          }
         </section>
 
         <section className="flex flex-col justify-center items-center">
@@ -66,15 +79,3 @@ export default function Home() {
   );
 }
 
-function AuthButton() {
-  const { data: sessionData } = useSession();
-
-  return (
-    <button
-      className="rounded-xl full bg-blue-700/70 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-      onClick={sessionData ? () => void signOut() : () => void signIn()}
-    >
-      {sessionData ? "Sign out" : "Sign in"}
-    </button>
-  );
-}
