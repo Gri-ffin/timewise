@@ -1,20 +1,25 @@
 import { User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
+import { BiTask } from "react-icons/bi"
 
 const ProfileDropDown = ({ username }: { username: string }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' className="rounded-lg">{username[0]}</Button>
+        <Button variant='outline'>{username[0]}</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 text-gray-300">
+      <DropdownMenuContent className="w-56 border-zinc-700">
         <DropdownMenuLabel>My account</DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-white" />
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <BiTask className="mr-2 w-4 h-4" />
+            <span>Task</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
