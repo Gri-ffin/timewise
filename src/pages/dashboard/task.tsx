@@ -7,6 +7,7 @@ import { authOptions } from "~/server/auth"
 import { CgDanger } from 'react-icons/cg'
 
 import AuthButton from "~/components/AuthButton"
+import ProfileDropDown from "~/components/ProfileDropDown"
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
@@ -14,8 +15,10 @@ const TaskPage = () => {
 
   if (sessionData !== null) {
     return (
-      <div>
-        Task page
+      <div className="min-h-screen">
+        <nav className="flex items-center justify-between">
+          <ProfileDropDown username={sessionData.user.name!} />
+        </nav>
       </div>
     )
   }
