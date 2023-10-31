@@ -6,6 +6,7 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+import { ThemeProvider } from '~/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,9 +16,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <div className={`${inter.className} bg-gray-900 text-white px-10 py-5`}>
-        <Component {...pageProps} />
-      </div>
+      <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+        <div className={`${inter.className} text-white px-10 py-5`}>
+          <Component {...pageProps} />
+        </div>
+      </ThemeProvider>
     </SessionProvider>
   );
 };
