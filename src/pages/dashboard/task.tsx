@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth"
 import { useSession } from "next-auth/react"
 import { authOptions } from "~/server/auth"
 
-
 import { CgDanger } from 'react-icons/cg'
 
 import AuthButton from "~/components/AuthButton"
