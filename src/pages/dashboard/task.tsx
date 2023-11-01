@@ -8,17 +8,26 @@ import { CgDanger } from 'react-icons/cg'
 
 import AuthButton from "~/components/AuthButton"
 import ProfileDropDown from "~/components/ProfileDropDown"
+import DateNavigationMenu from "~/components/task/DateNavigationMenu"
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
-  console.log(sessionData);
 
   if (sessionData !== null) {
     return (
       <div className="min-h-screen">
         <nav className="flex items-center justify-between">
+          <h1 className="font-extrabold text-lg">TimeWise</h1>
           <ProfileDropDown username={sessionData.user.name!} />
         </nav>
+        <main>
+          <div className="flex items-center justify-center my-5">
+            <DateNavigationMenu />
+          </div>
+          <section>
+
+          </section>
+        </main>
       </div>
     )
   }
