@@ -1,8 +1,8 @@
-import { Calendar, Folder, Settings, User } from "lucide-react"
+import { Calendar, Folder, LogOut, Settings, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { Button } from "./ui/button"
 import { BiStats, BiTask } from "react-icons/bi"
 import { Avatar, AvatarFallback } from "./ui/avatar"
+import { signOut } from "next-auth/react"
 
 // TODO: change the spans to a links that redirect to the appropriate view
 const ProfileDropDown = ({ username }: { username: string }) => {
@@ -46,6 +46,10 @@ const ProfileDropDown = ({ username }: { username: string }) => {
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
+            <LogOut className="mr-2 w-4 h-4" />
+            <span>Sign out</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
