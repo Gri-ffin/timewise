@@ -2,13 +2,16 @@ import { Calendar, Folder, Settings, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
 import { BiStats, BiTask } from "react-icons/bi"
+import { Avatar, AvatarFallback } from "./ui/avatar"
 
 // TODO: change the spans to a links that redirect to the appropriate view
 const ProfileDropDown = ({ username }: { username: string }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline'>{username[0]}</Button>
+        <Avatar>
+          <AvatarFallback className="cursor-pointer">{username[0]}</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 border-zinc-700">
         <DropdownMenuLabel>My account</DropdownMenuLabel>
