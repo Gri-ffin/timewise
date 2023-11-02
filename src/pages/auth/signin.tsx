@@ -24,8 +24,8 @@ const SignInPage: NextPage<Props> = ({ providers }) => {
           let Icon = getIcon(provider.id)
           return (
             <button
-              className="rounded-lg bg-zinc-700/50 px-3 py-5 hover:bg-zinc-600/50 flex items-center space-x-3"
-              onClick={() => signIn(provider.id, { callbackUrl: '/' })}
+              className="rounded-xl bg-zinc-700/50 px-3 py-5 hover:bg-zinc-600/50 flex items-center space-x-3"
+              onClick={() => signIn(provider.id, { callbackUrl: '/dashboard/task' })}
             >
               <Icon /> <span>Login with {provider.name}</span>
             </button>
