@@ -13,7 +13,7 @@ const DateNavigationMenu = () => {
     <NavigationMenu>
       <NavigationMenuList>
         {navigationItems.map(navigationItem => (
-          <NavigationMenuItem>
+          <NavigationMenuItem key={navigationItem.path}>
             <Link href={`/dashboard${navigationItem.path}`} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 {navigationItem.name}
