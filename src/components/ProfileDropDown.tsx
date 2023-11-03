@@ -1,15 +1,16 @@
 import { Calendar, Folder, LogOut, Settings, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { BiStats, BiTask } from "react-icons/bi"
-import { Avatar, AvatarFallback } from "./ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { signOut } from "next-auth/react"
 
 // TODO: change the spans to a links that redirect to the appropriate view
-const ProfileDropDown = ({ username }: { username: string }) => {
+const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: string }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
+          <AvatarImage src={imgUrl} />
           <AvatarFallback className="cursor-pointer">{username[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
