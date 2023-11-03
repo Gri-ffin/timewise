@@ -5,13 +5,13 @@ import Link from 'next/link'
 
 import dayjs from 'dayjs'
 
-import ProfileDropDown from "~/components/ProfileDropDown"
 import DateNavigationMenu from "~/components/task/DateNavigationMenu"
 import { authOptions } from "~/server/auth"
 import { Button } from "~/components/ui/button"
 import { TextIcon } from "lucide-react"
 import Head from "next/head"
 import AccessDenied from "~/components/AccessDenied"
+import Navbar from "~/components/Navbar"
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -31,10 +31,7 @@ const TaskPage = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="min-h-screen">
-          <nav className="flex items-center justify-between">
-            <h1 className="font-extrabold text-lg">TimeWise</h1>
-            <ProfileDropDown username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
-          </nav>
+          <Navbar username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
           <main>
             <div className="flex items-center justify-center my-5">
               <DateNavigationMenu />
