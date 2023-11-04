@@ -5,6 +5,8 @@ import Head from "next/head"
 import { useForm } from "react-hook-form"
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon } from "lucide-react"
 
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
@@ -13,6 +15,11 @@ import { authOptions } from "~/server/auth"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
+import { cn } from '~/lib/utils'
+import { Calendar } from '~/components/ui/calendar'
+import dayjs from "dayjs"
+
 
 const formSchema = z.object({
   title: z.string()
@@ -47,6 +54,9 @@ const TaskAdd = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    let date = dayjs(values.deadline)
+    console.log(date.toISOString());
+
 
   }
 
@@ -64,7 +74,7 @@ const TaskAdd = () => {
             <div>
               <h3 className="text-lg font-medium">Add a task</h3>
               <p className="text-sm text-muted-foreground">
-                Add your task title, define a small memo and set the date to finish the task.
+                Add your task title, define a small memo and set the deadline.
               </p>
             </div>
             <Separator />
@@ -85,6 +95,65 @@ const TaskAdd = () => {
                       <FormMessage />
                     </FormItem>
                   )} />
+                <FormField
+                  control={form.control}
+                  name="memo"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Memo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="The task memo..." {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        A short and good description would be nice.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                <FormField
+                  control={form.control}
+                  name="deadline"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Deadline</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant='outline'
+                              className={cn(
+                                "w-[240px] pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date < new Date()
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormDescription>
+                        You should set a deadline for your task.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button type="submit">Submit</Button>
               </form>
             </Form>
