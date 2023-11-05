@@ -18,19 +18,20 @@ import { Button } from "~/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { cn } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
-import dayjs from "dayjs"
+import { api } from "~/utils/api"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { BsExclamation } from "react-icons/bs"
 
-
-const formSchema = z.object({
+export const formSchema = z.object({
   title: z.string()
     .min(5,
       { message: 'The title must be at least 5 chars.' })
-    .max(20,
+    .max(40,
       { message: 'The title must be at most 20 chars.' }),
   memo: z.string()
     .min(3,
       { message: 'The memo must be at least 3 chars.' })
-    .max(40,
+    .max(60,
       { message: 'The memo must be at most 40 chars.' }),
   deadline: z.date(
     {
@@ -42,6 +43,7 @@ const formSchema = z.object({
 
 const TaskAdd = () => {
   const { data: sessionData } = useSession()
+  const taskMutation = api.task.create.useMutation()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,11 +55,7 @@ const TaskAdd = () => {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    let date = dayjs(values.deadline)
-    console.log(date.toISOString());
-
-
+    taskMutation.mutate(values)
   }
 
   if (sessionData != null) {
@@ -154,7 +152,27 @@ const TaskAdd = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" className={`${taskMutation.isLoading && 'transition-all duration-150 bg-gradient-to-r from-pink-500 to-yellow-500'}`}>Submit</Button>
+                {
+                  taskMutation.error &&
+                  <Alert variant='destructive'>
+                    <BsExclamation className="h-4 w-4" />
+                    <AlertTitle>An error occured</AlertTitle>
+                    <AlertDescription>
+                      {taskMutation.error.message}
+                    </AlertDescription>
+                  </Alert>
+                }
+                {
+                  taskMutation.isSuccess &&
+                  <Alert>
+                    <BsExclamation className="h-4 w-4" />
+                    <AlertTitle>Task Insertion</AlertTitle>
+                    <AlertDescription>
+                      {form.getValues('title')} added successfully.
+                    </AlertDescription>
+                  </Alert>
+                }
               </form>
             </Form>
           </main>
