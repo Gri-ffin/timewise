@@ -25,10 +25,10 @@ export const taskRouter = createTRPCRouter({
       });
     }),
 
-  /* getLatest: protectedProcedure.query(({ ctx }) => {
-      return ctx.db.post.findFirst({
-        orderBy: { createdAt: "desc" },
-        where: { createdBy: { id: ctx.session.user.id } },
-      });
-    }), */
+  getTasks: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.task.findMany({
+      orderBy: { createdAt: "desc" },
+      where: { user: { id: ctx.session.user.id } },
+    });
+  }),
 });
