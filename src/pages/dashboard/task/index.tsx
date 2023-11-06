@@ -12,11 +12,16 @@ import { TextIcon } from "lucide-react"
 import Head from "next/head"
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
+import { api } from "~/utils/api"
+import Task from "~/components/task/Task"
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
+  const tasks = api.task.getTasks.useQuery();
+  console.log(tasks.data);
+
 
   let now = dayjs()
   const currentDay = days[now.day()]
@@ -44,10 +49,18 @@ const TaskPage = () => {
                   <TextIcon className="mr-2 h-4 w-4" /> Add a task...
                 </Button>
               </Link>
-              {/* TODO: Change this to the todos list once i start working on the db */}
-              <div className="flex flex-col items-center justify-center mt-44">
-                <p className="text-xl">Well, no tasks seems to be found.</p>
-              </div>
+              {tasks.isLoading ?
+                <div className="flex flex-col items-center justify-center mt-44">
+                  <p className="text-xl">Loading. . .</p>
+                </div> :
+                <div className="space-y-4 mt-5 divide-y">
+                  {tasks.data?.map(task => {
+                    return (
+                      <Task data={task} />
+                    )
+                  })}
+                </div>
+              }
             </section>
           </main>
         </div>
