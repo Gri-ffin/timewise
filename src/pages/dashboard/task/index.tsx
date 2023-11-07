@@ -8,24 +8,37 @@ import dayjs from 'dayjs'
 import DateNavigationMenu from "~/components/task/DateNavigationMenu"
 import { authOptions } from "~/server/auth"
 import { Button } from "~/components/ui/button"
-import { TextIcon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon, TextIcon } from "lucide-react"
 import Head from "next/head"
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
 import { api } from "~/utils/api"
 import Task from "~/components/task/Task"
+import { useState } from "react"
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
-  const tasks = api.task.getTasks.useQuery();
-  console.log(tasks.data);
+  const [date, setDate] = useState(dayjs())
 
+  const startDateFilter = date.startOf('day').toDate();
+  const finishDateFilter = date.endOf('day').toDate();
 
-  let now = dayjs()
-  const currentDay = days[now.day()]
-  const currentDate = now.format('MMM DD, YYYY')
+  const tasks = api.task.getTasks.useQuery({ startDateFilter: startDateFilter, finishDateFilter: finishDateFilter });
+
+  const switchDate = (state: 'substract' | 'add') => {
+    switch (state) {
+      case 'substract':
+        setDate(prev => prev.subtract(1, 'day'))
+
+        break;
+
+      case 'add':
+        setDate(prev => prev.add(1, 'day'))
+        break
+    }
+  }
 
   if (sessionData !== null) {
     return (
@@ -42,8 +55,12 @@ const TaskPage = () => {
               <DateNavigationMenu />
             </div>
             <section className="my-14">
-              <h3 className="text-3xl text-center">{currentDay}</h3>
-              <p className="text-slate-500 text-center my-4">{currentDate}</p>
+              <div className="flex flex-row items-center justify-center space-x-7">
+                <ArrowLeftIcon onClick={() => switchDate('substract')} className="cursor-pointer" />
+                <h3 className="text-3xl text-center">{days[date.day()]}</h3>
+                <ArrowRightIcon onClick={() => switchDate('add')} className="cursor-pointer" />
+              </div>
+              <p className="text-slate-500 text-center my-4">{date.format('MMM DD, YYYY')}</p>
               <Link href='/dashboard/task/add'>
                 <Button className="w-full justify-start" variant='outline'>
                   <TextIcon className="mr-2 h-4 w-4" /> Add a task...
@@ -56,7 +73,7 @@ const TaskPage = () => {
                 <div className="space-y-4 mt-5 divide-y">
                   {tasks.data?.map(task => {
                     return (
-                      <Task data={task} />
+                      <Task data={task} key={task.id} />
                     )
                   })}
                 </div>
