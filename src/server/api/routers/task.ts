@@ -25,10 +25,21 @@ export const taskRouter = createTRPCRouter({
       });
     }),
 
-  getTasks: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.task.findMany({
-      orderBy: { createdAt: "desc" },
-      where: { user: { id: ctx.session.user.id } },
-    });
-  }),
+  getTasks: protectedProcedure
+    .input(z.object({
+      startDateFilter: z.date(),
+      finishDateFilter: z.date()
+    }))
+    .query(({ ctx, input }) => {
+      return ctx.db.task.findMany({
+        orderBy: { createdAt: "desc" },
+        where: {
+          user: { id: ctx.session.user.id },
+          deadline: {
+            gte: input.startDateFilter,
+            lt: input.finishDateFilter
+          }
+        },
+      });
+    }),
 });
