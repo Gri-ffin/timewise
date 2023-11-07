@@ -14,7 +14,7 @@ const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: strin
           <AvatarFallback className="cursor-pointer">{username[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 border-zinc-700">
+      <DropdownMenuContent className="w-56 mr-5">
         <DropdownMenuLabel>My account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
