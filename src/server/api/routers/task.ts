@@ -25,6 +25,19 @@ export const taskRouter = createTRPCRouter({
       });
     }),
 
+  delete: protectedProcedure
+    .input(z.object({
+      id: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.task.delete({
+        where: {
+          user: { id: ctx.session.user.id },
+          id: input.id
+        }
+      })
+    }),
+
   getTasks: protectedProcedure
     .input(z.object({
       startDateFilter: z.date(),
