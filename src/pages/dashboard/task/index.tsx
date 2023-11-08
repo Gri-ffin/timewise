@@ -2,8 +2,8 @@ import type { GetServerSideProps } from "next"
 import { getServerSession } from "next-auth"
 import { useSession } from "next-auth/react"
 import Link from 'next/link'
-
 import dayjs from 'dayjs'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
 
 import DateNavigationMenu from "~/components/task/DateNavigationMenu"
 import { authOptions } from "~/server/auth"
@@ -17,25 +17,28 @@ import Task from "~/components/task/Task"
 import { useState } from "react"
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+type Period = 'day' | 'week' | 'month' | 'year'
+dayjs.extend(weekOfYear)
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
   const [date, setDate] = useState(dayjs())
+  const [period, setPeriod] = useState<Period>('month')
 
-  const startDateFilter = date.startOf('day').toDate();
-  const finishDateFilter = date.endOf('day').toDate();
+  const startDateFilter = date.startOf(period).toDate();
+  const finishDateFilter = date.endOf(period).toDate();
 
   const tasks = api.task.getTasks.useQuery({ startDateFilter: startDateFilter, finishDateFilter: finishDateFilter });
 
   const switchDate = (state: 'substract' | 'add') => {
     switch (state) {
       case 'substract':
-        setDate(prev => prev.subtract(1, 'day'))
+        setDate(prev => prev.subtract(1, period))
 
         break;
 
       case 'add':
-        setDate(prev => prev.add(1, 'day'))
+        setDate(prev => prev.add(1, period))
         break
     }
   }
@@ -57,10 +60,22 @@ const TaskPage = () => {
             <section className="my-14">
               <div className="flex flex-row items-center justify-center space-x-7">
                 <ArrowLeftIcon onClick={() => switchDate('substract')} className="cursor-pointer" />
-                <h3 className="text-3xl text-center">{days[date.day()]}</h3>
+                <h3 className="text-3xl text-center">
+                  {
+                    period === 'day' ? days[date.day()] :
+                      period === 'week' ? `Week ${date.week()} of ${date.year()}` :
+                        period === 'month' ? `${date.format('MMMM')} of ${date.year()}` : ''
+                  }
+                </h3>
                 <ArrowRightIcon onClick={() => switchDate('add')} className="cursor-pointer" />
               </div>
-              <p className="text-slate-500 text-center my-4">{date.format('MMM DD, YYYY')}</p>
+              <p className="text-slate-500 text-center my-4">
+                {
+                  period === 'day' ? date.format('MMM DD, YYYY') :
+                    period === 'week' ? `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}` :
+                      period === 'month' ? `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}` : ''
+                }
+              </p>
               <Link href='/dashboard/task/add'>
                 <Button className="w-full justify-start" variant='outline'>
                   <TextIcon className="mr-2 h-4 w-4" /> Add a task...
@@ -71,11 +86,11 @@ const TaskPage = () => {
                   <p className="text-xl">Loading. . .</p>
                 </div> :
                 <div className="space-y-4 mt-5 divide-y">
-                  {tasks.data?.map(task => {
+                  {tasks.data!.length > 0 ? tasks.data?.map(task => {
                     return (
                       <Task data={task} key={task.id} />
                     )
-                  })}
+                  }) : <div className="mt-10 font-semibold text-center text-xl">You don't have any tasks.</div>}
                 </div>
               }
             </section>
