@@ -1,5 +1,7 @@
 import { signOut, signIn, useSession } from "next-auth/react";
 
+// this is the signin button used in the index page (welcome page) that redirect to a custom page to login using
+// a provider
 function AuthButton() {
   const { data: sessionData } = useSession();
 

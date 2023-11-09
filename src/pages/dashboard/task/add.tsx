@@ -7,6 +7,7 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { CalendarIcon } from "lucide-react"
+import { BsExclamation } from "react-icons/bs"
 
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
@@ -20,8 +21,8 @@ import { cn } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
 import { api } from "~/utils/api"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
-import { BsExclamation } from "react-icons/bs"
 
+// this is the formschema that will define the rules and fields of the form
 export const formSchema = z.object({
   title: z.string()
     .min(5,
@@ -43,8 +44,12 @@ export const formSchema = z.object({
 
 const TaskAdd = () => {
   const { data: sessionData } = useSession()
+  // define the task mutation to create the task
   const taskMutation = api.task.create.useMutation()
 
+  // we use the schema we defined to check and define the form
+  // to check and get the values of our form
+  // and we define the default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +59,7 @@ const TaskAdd = () => {
     }
   })
 
+  // we use the mutation to create the task in the db using trpc
   function onSubmit(values: z.infer<typeof formSchema>) {
     taskMutation.mutate(values)
   }
@@ -139,6 +145,8 @@ const TaskAdd = () => {
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
+                              // if the date is inferior to today we disable that date so
+                              // that the user can't choose
                               date < new Date()
                             }
                             initialFocus
@@ -154,6 +162,9 @@ const TaskAdd = () => {
                 />
                 <Button type="submit" className={`${taskMutation.isLoading && 'transition-all duration-150 bg-gradient-to-r from-pink-500 to-yellow-500'}`}>Submit</Button>
                 {
+                  // if the mutation returned an error 
+                  // we display an alert with the error
+                  // message
                   taskMutation.error &&
                   <Alert variant='destructive'>
                     <BsExclamation className="h-4 w-4" />
@@ -164,6 +175,8 @@ const TaskAdd = () => {
                   </Alert>
                 }
                 {
+                  // if the mutation succeeded we display that the task has been created
+                  // in the db
                   taskMutation.isSuccess &&
                   <Alert>
                     <BsExclamation className="h-4 w-4" />
@@ -185,6 +198,7 @@ const TaskAdd = () => {
 
 export default TaskAdd
 
+// we prefetch the session to check if the user is logged in or not
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {

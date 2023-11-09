@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { useRouter } from "next/router"
 import { BiSolidError } from 'react-icons/bi'
 
+// if an error occures during authentication we redirect the user to this page and display
+// the error
 const ErrorPage = () => {
   const router = useRouter()
   const { error } = router.query

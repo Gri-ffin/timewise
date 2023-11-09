@@ -1,6 +1,7 @@
 import { CgDanger } from "react-icons/cg"
 import AuthButton from "./AuthButton"
 
+// this is the component we show when the user tries to access a protected page
 const AccessDenied = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center space-y-7">

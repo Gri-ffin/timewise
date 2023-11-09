@@ -7,6 +7,7 @@ import {
 
 
 export const taskRouter = createTRPCRouter({
+  // the precedure the create the task
   create: protectedProcedure
     .input(z.object(
       {
@@ -25,6 +26,7 @@ export const taskRouter = createTRPCRouter({
       });
     }),
 
+  // the procedure the delete the task based on the id
   delete: protectedProcedure
     .input(z.object({
       id: z.number()
@@ -38,6 +40,7 @@ export const taskRouter = createTRPCRouter({
       })
     }),
 
+  // the procedure the fetch the tasks between an interval of dates passed
   getTasks: protectedProcedure
     .input(z.object({
       startDateFilter: z.date(),

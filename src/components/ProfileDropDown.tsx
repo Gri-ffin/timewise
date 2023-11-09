@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { signOut } from "next-auth/react"
 
 // TODO: change the spans to a links that redirect to the appropriate view
+// this is the menu that the user can choose to quickly navigate
 const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: string }) => {
   return (
     <DropdownMenu>

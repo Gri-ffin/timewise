@@ -9,6 +9,8 @@ interface Props {
   providers: ClientSafeProvider[]
 }
 
+// this the signin page that allow the user to connect using a provider of his choice
+// for example: discord, github; google, etc...
 const SignInPage: NextPage<Props> = ({ providers }) => {
   return (
     <>
@@ -19,6 +21,7 @@ const SignInPage: NextPage<Props> = ({ providers }) => {
       </Head>
       <div className="min-h-screen w-full flex flex-col items-center justify-center space-y-7">
         <h1 className="font-bold text-2xl">Let&apos;s dive in</h1>
+        {/* we loop over the provider array and display each provider with its appropriate name and icon*/}
         {Object.values(providers).map((provider) => {
           // get icon based on the provider type eg: id = discord => discord icon
           let Icon = getIcon(provider.id)
@@ -38,6 +41,7 @@ const SignInPage: NextPage<Props> = ({ providers }) => {
 
 export default SignInPage
 
+// fetch the provider array defined in the authoptions pre-render
 export const getServerSideProps: GetServerSideProps = async () => {
   const providers = await getProviders()
   return {

@@ -17,19 +17,31 @@ import { api } from "~/utils/api"
 import Task from "~/components/task/Task"
 import type { Period } from "~/utils/task/types"
 
+// dayjs returns a number when calling the day function so we will just
+// choose the day based on the number
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+// this is used to get a function called weekOfYear which return the number of the current week
+// during the whole year
 dayjs.extend(weekOfYear)
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
+  // we will use this to update start and finish date from today based on the period to
+  // fetch the tasks and display the correct date based on the period selected
   const [date, setDate] = useState(dayjs())
+  // this will update the period chosen by the user
   const [period, setPeriod] = useState<Period>('day')
 
+  // this is the start of the date to fetch
   const startDateFilter = date.startOf(period).toDate();
+  // we will fetch the tasks between the start and this finish date based
+  // on period for example if period is week we fetch the tasks of the current week
   const finishDateFilter = date.endOf(period).toDate();
 
+  // we fetch the tasks based on the interval of the dates from db
   const tasks = api.task.getTasks.useQuery({ startDateFilter: startDateFilter, finishDateFilter: finishDateFilter });
 
+  // this is used so the user can switch between days and week and months and years
   const switchDate = (state: 'substract' | 'add') => {
     switch (state) {
       case 'substract':
@@ -42,6 +54,7 @@ const TaskPage = () => {
         break
     }
   }
+  // the period changes based on the user selection 
   const changePeriod = (period: Period) => {
     setPeriod(period)
   }
@@ -58,16 +71,22 @@ const TaskPage = () => {
           <Navbar username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
           <main>
             <div className="flex items-center justify-center my-5">
+              {/* the user can choose the available periods from this component and update the state of this page*/}
               <DateNavigationMenu changePeriod={changePeriod} period={period} />
             </div>
             <section className="my-14">
               <div className="flex flex-row items-center justify-center space-x-7">
+                {/* this switch to the previous day, week, month or year*/}
                 <ArrowLeftIcon onClick={() => switchDate('substract')} className="cursor-pointer" />
                 <h3 className="text-3xl text-center">
                   {
+                    // this displays the day name for example Sunday, Monday ...
                     period === 'day' ? days[date.day()] :
+                      // this displays for example Week 45 of 2024 based on the number of the current week in the year 
                       period === 'week' ? `Week ${date.week()} of ${date.year()}` :
+                        // this displays for example January of 2024
                         period === 'month' ? `${date.format('MMMM')} of ${date.year()}` :
+                          // this displays the current year
                           `Year ${date.year()}`
 
                   }
@@ -76,7 +95,10 @@ const TaskPage = () => {
               </div>
               <p className="text-slate-500 text-center my-4">
                 {
+                  // this shows for example the full date of today eg: oct 27, 2024
                   period === 'day' ? date.format('MMM DD, YYYY') :
+                    // this will show the month and day of the interval of period
+                    // eg: period is year 2024 it will display Jan 1 - Dec 31
                     `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}`
                 }
               </p>
@@ -111,6 +133,7 @@ const TaskPage = () => {
 
 export default TaskPage
 
+// prefetch the session to check if user is authenticated or not
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
