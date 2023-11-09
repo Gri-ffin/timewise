@@ -1,28 +1,53 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# [TimeWise]
 
-## What's next? How do I make an app with this?
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/gri-ffin/timewise.svg)](https://github.com/gri-ffin/timewise/stargazers)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+**TimeWise** is a web app that will help you manage your project and tasks, while also helping you track and manage the time wasted.
+---
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Table of Contents
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Learn More
+---
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Features
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- **Task Management:** Create, edit, and prioritize tasks with ease.
+- **Markdown Support:** Format task descriptions and notes using Markdown.
+- **Time Tracking:** Log and analyze time spent on tasks and projects.
+- **Calendar Integration:** View and schedule tasks on a dynamic calendar.
+- **Goal Setting:** Set and monitor both short-term and long-term goals.
+- **Collaboration:** Share tasks, collaborate, and communicate with team members.
+- **Reports and Analytics:** Generate insightful reports on productivity and time usage.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+---
 
-## How do I deploy this?
+## Demo
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+[Insert link to your live demo or GIFs/images showcasing your app]
+
+---
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/yourproject.git
+
+# Navigate to the project directory
+cd yourproject
+
+# Install dependencies
+
+npm install
+
+# Start the app
+npm start
