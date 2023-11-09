@@ -4,26 +4,26 @@ import { useSession } from "next-auth/react"
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+import { useState } from "react"
+import { ArrowLeftIcon, ArrowRightIcon, TextIcon } from "lucide-react"
 
 import DateNavigationMenu from "~/components/task/DateNavigationMenu"
 import { authOptions } from "~/server/auth"
 import { Button } from "~/components/ui/button"
-import { ArrowLeftIcon, ArrowRightIcon, TextIcon } from "lucide-react"
 import Head from "next/head"
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
 import { api } from "~/utils/api"
 import Task from "~/components/task/Task"
-import { useState } from "react"
+import type { Period } from "~/utils/task/types"
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-type Period = 'day' | 'week' | 'month' | 'year'
 dayjs.extend(weekOfYear)
 
 const TaskPage = () => {
   const { data: sessionData } = useSession()
   const [date, setDate] = useState(dayjs())
-  const [period, setPeriod] = useState<Period>('month')
+  const [period, setPeriod] = useState<Period>('day')
 
   const startDateFilter = date.startOf(period).toDate();
   const finishDateFilter = date.endOf(period).toDate();
@@ -42,6 +42,9 @@ const TaskPage = () => {
         break
     }
   }
+  const changePeriod = (period: Period) => {
+    setPeriod(period)
+  }
 
   if (sessionData !== null) {
     return (
@@ -55,7 +58,7 @@ const TaskPage = () => {
           <Navbar username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
           <main>
             <div className="flex items-center justify-center my-5">
-              <DateNavigationMenu />
+              <DateNavigationMenu changePeriod={changePeriod} period={period} />
             </div>
             <section className="my-14">
               <div className="flex flex-row items-center justify-center space-x-7">
@@ -64,7 +67,9 @@ const TaskPage = () => {
                   {
                     period === 'day' ? days[date.day()] :
                       period === 'week' ? `Week ${date.week()} of ${date.year()}` :
-                        period === 'month' ? `${date.format('MMMM')} of ${date.year()}` : ''
+                        period === 'month' ? `${date.format('MMMM')} of ${date.year()}` :
+                          `Year ${date.year()}`
+
                   }
                 </h3>
                 <ArrowRightIcon onClick={() => switchDate('add')} className="cursor-pointer" />
@@ -72,8 +77,7 @@ const TaskPage = () => {
               <p className="text-slate-500 text-center my-4">
                 {
                   period === 'day' ? date.format('MMM DD, YYYY') :
-                    period === 'week' ? `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}` :
-                      period === 'month' ? `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}` : ''
+                    `${dayjs(startDateFilter).format('MMM DD')} - ${dayjs(finishDateFilter).format('MMM DD')}`
                 }
               </p>
               <Link href='/dashboard/task/add'>
