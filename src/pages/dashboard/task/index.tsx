@@ -13,9 +13,8 @@ import { Button } from "~/components/ui/button"
 import Head from "next/head"
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
-import { api } from "~/utils/api"
-import Task from "~/components/task/Task"
 import type { Period } from "~/utils/task/types"
+import Tasks from "~/components/task/Tasks"
 
 // dayjs returns a number when calling the day function so we will just
 // choose the day based on the number
@@ -37,9 +36,6 @@ const TaskPage = () => {
   // we will fetch the tasks between the start and this finish date based
   // on period for example if period is week we fetch the tasks of the current week
   const finishDateFilter = date.endOf(period).toDate();
-
-  // we fetch the tasks based on the interval of the dates from db
-  const tasks = api.task.getTasks.useQuery({ startDateFilter: startDateFilter, finishDateFilter: finishDateFilter });
 
   // this is used so the user can switch between days and week and months and years
   const switchDate = (state: 'substract' | 'add') => {
@@ -107,18 +103,7 @@ const TaskPage = () => {
                   <TextIcon className="mr-2 h-4 w-4" /> Add a task...
                 </Button>
               </Link>
-              {tasks.isLoading ?
-                <div className="flex flex-col items-center justify-center mt-44">
-                  <p className="text-xl">Loading. . .</p>
-                </div> :
-                <div className="space-y-4 mt-5 divide-y">
-                  {tasks.data!.length > 0 ? tasks.data?.map(task => {
-                    return (
-                      <Task data={task} key={task.id} />
-                    )
-                  }) : <div className="mt-10 font-semibold text-center text-xl">You don't have any tasks.</div>}
-                </div>
-              }
+              <Tasks startDateFilter={startDateFilter} finishDateFilter={finishDateFilter} />
             </section>
           </main>
         </div>
