@@ -21,26 +21,9 @@ import { cn } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
 import { api } from "~/utils/api"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { taskFormSchema } from "~/utils/task/types"
 
-// this is the formschema that will define the rules and fields of the form
-export const formSchema = z.object({
-  title: z.string()
-    .min(5,
-      { message: 'The title must be at least 5 chars.' })
-    .max(40,
-      { message: 'The title must be at most 20 chars.' }),
-  memo: z.string()
-    .min(3,
-      { message: 'The memo must be at least 3 chars.' })
-    .max(60,
-      { message: 'The memo must be at most 40 chars.' }),
-  deadline: z.date(
-    {
-      required_error: 'A deadline is required.',
-      invalid_type_error: "That's not a valid date."
-    }
-  )
-})
+
 
 const TaskAdd = () => {
   const { data: sessionData } = useSession()
@@ -50,8 +33,8 @@ const TaskAdd = () => {
   // we use the schema we defined to check and define the form
   // to check and get the values of our form
   // and we define the default values
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof taskFormSchema>>({
+    resolver: zodResolver(taskFormSchema),
     defaultValues: {
       title: '',
       memo: '',
@@ -60,7 +43,7 @@ const TaskAdd = () => {
   })
 
   // we use the mutation to create the task in the db using trpc
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof taskFormSchema>) {
     taskMutation.mutate(values)
   }
 
