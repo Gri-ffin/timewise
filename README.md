@@ -1,5 +1,5 @@
 
-# [TimeWise]
+# TimeWise
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/gri-ffin/timewise.svg)](https://github.com/gri-ffin/timewise/stargazers)
