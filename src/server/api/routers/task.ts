@@ -26,6 +26,29 @@ export const taskRouter = createTRPCRouter({
       });
     }),
 
+  // the procedure the update the task based on the id
+  update: protectedProcedure
+    .input(z.object({
+      id: z.number(),
+      title: z.string().min(5).max(40),
+      memo: z.string().min(3).max(60),
+      deadline: z.date()
+
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.task.update({
+        where: {
+          user: { id: ctx.session.user.id },
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          memo: input.memo,
+          deadline: input.deadline
+        }
+      })
+    }),
+
   // the procedure the delete the task based on the id
   delete: protectedProcedure
     .input(z.object({
