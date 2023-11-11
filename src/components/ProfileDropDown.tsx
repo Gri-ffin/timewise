@@ -11,7 +11,7 @@ const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: strin
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src={imgUrl} />
+          <AvatarImage src={imgUrl} className="cursor-pointer" />
           <AvatarFallback className="cursor-pointer">{username[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
