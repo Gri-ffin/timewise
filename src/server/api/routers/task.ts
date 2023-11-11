@@ -21,6 +21,7 @@ export const taskRouter = createTRPCRouter({
           title: input.title,
           memo: input.memo,
           deadline: input.deadline,
+          done: false,
           user: { connect: { id: ctx.session.user.id } },
         },
       });
@@ -59,6 +60,24 @@ export const taskRouter = createTRPCRouter({
         where: {
           user: { id: ctx.session.user.id },
           id: input.id
+        }
+      })
+    }),
+
+  //
+  changeStatusDone: protectedProcedure
+    .input(z.object({
+      done: z.boolean(),
+      id: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.task.update({
+        where: {
+          user: { id: ctx.session.user.id },
+          id: input.id,
+        },
+        data: {
+          done: input.done
         }
       })
     }),
