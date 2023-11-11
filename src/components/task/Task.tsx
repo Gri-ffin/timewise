@@ -83,7 +83,7 @@ const Task = ({ data }: { data: TaskType }) => {
                     </DropdownMenuItem>
                     <DialogTrigger asChild>
                       <DropdownMenuItem className="cursor-pointer">
-                        <Pen className="mr-2" size={10} />
+                        <Pen className="w-4 h-4 mr-2" />
                         <span>Edit</span>
                       </DropdownMenuItem>
                     </DialogTrigger>
