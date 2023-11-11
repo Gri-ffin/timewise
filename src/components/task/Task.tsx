@@ -16,8 +16,7 @@ import { taskFormSchema } from "~/utils/task/types"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from '~/components/ui/button'
 import { api } from "~/utils/api"
-
-
+import { Checkbox } from "../ui/checkbox"
 
 const Task = ({ data }: { data: TaskType }) => {
   // close the dialog when the task is updated
@@ -26,6 +25,8 @@ const Task = ({ data }: { data: TaskType }) => {
   const deleteMutation = api.task.delete.useMutation()
   // Create the update muation to update the task
   const updateMutation = api.task.update.useMutation()
+  // the handle done status mutation
+  const doneStatusMutation = api.task.changeStatusDone.useMutation()
   // we use the schema we defined to check and define the form
   // to check and get the values of our form
   // and we define the default values
@@ -53,6 +54,17 @@ const Task = ({ data }: { data: TaskType }) => {
   // but it doesnt update the frontend, creating a state would just be more tedious and painful
   const utils = api.useUtils()
 
+  // if the user check the box we set the task to done = true else we set done to false in db
+  const handleCheckBoxChange = (event: boolean) => {
+    const done = event
+    doneStatusMutation.mutate({ id: data.id, done }, {
+      onSuccess: () => {
+        // invalidate the tasks so that trpc refresh and refetch them to update the frontend
+        utils.task.invalidate()
+      }
+    })
+  }
+
   // the function to call to delete the button using the id passed in the prop
   const deleteTask = () => {
     deleteMutation.mutate({ id: data.id }, {
@@ -69,7 +81,10 @@ const Task = ({ data }: { data: TaskType }) => {
       {deleteMutation.isLoading ? <h3 className="font-semibold">Deleting . . .</h3> :
         <>
           <div className="flex flex-row items-center justify-between">
-            <h3 className="capitalize font-semibold">{data.title}</h3>
+            <div className="flex items-center justify-center space-x-3">
+              <Checkbox defaultChecked={data.done} onCheckedChange={handleCheckBoxChange} id="task" disabled={doneStatusMutation.isLoading} />
+              <label className="capitalize font-semibold peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="task">{data.title}</label>
+            </div>
             <Dialog open={open} onOpenChange={setOpen}>
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
