@@ -22,10 +22,12 @@ const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: strin
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {/* Profile Section */}
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
+          <Link href='/dashboard/profile/'>
+            <DropdownMenuItem className="flex items-center cursor-pointer">
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+          </Link>
           {/* Task Section */}
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
@@ -57,11 +59,6 @@ const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: strin
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* Calendar Section */}
-          <DropdownMenuItem>
-            <Calendar className="mr-2 h-4 w-4" />
-            <span>Calendar</span>
-          </DropdownMenuItem>
           {/* Stats Section */}
           <DropdownMenuItem>
             <BiStats className="mr-2 h-4 w-4" />
