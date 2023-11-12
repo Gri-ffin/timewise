@@ -14,7 +14,7 @@ export default function Home() {
         <meta name="description" content="Manage your time easily, efficiently and wisely" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen w-full">
+      <main className="w-full">
         <nav className="flex items-center justify-between">
           <h1 className="font-extrabold text-lg">TimeWise</h1>
           <AuthButton />

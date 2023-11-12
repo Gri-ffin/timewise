@@ -9,7 +9,7 @@ const ErrorPage = () => {
   const { error } = router.query
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-5">
+    <div className="flex flex-col items-center justify-center space-y-5">
       <BiSolidError size={100} className="text-red-700" />
       <p className="text-center text-slate-500">
         Oops, it seems there is a problem with the {error}.

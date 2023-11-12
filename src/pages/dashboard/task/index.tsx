@@ -63,7 +63,7 @@ const TaskPage = () => {
           <meta name="description" content="Add tasks and view them based on day, week, month or year." />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <div className="min-h-screen">
+        <div>
           <Navbar username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
           <main>
             <div className="flex items-center justify-center my-5">

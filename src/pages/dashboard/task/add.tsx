@@ -55,7 +55,7 @@ const TaskAdd = () => {
           <meta name="description" content="Add a new task to your existing ones." />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <div className="min-h-screen">
+        <div>
           <Navbar username={sessionData.user.name!} imgUrl={sessionData.user.image!} />
           <main className="space-y-6 my-16">
             <div>
