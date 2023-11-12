@@ -6,9 +6,14 @@ import Head from 'next/head'
 import AccessDenied from "~/components/AccessDenied"
 import Navbar from "~/components/Navbar"
 import { authOptions } from "~/server/auth"
+import { api } from "~/utils/api"
 
+// TODO: Display user info in a card
 const ProfilePage = () => {
   const { data: sessionData } = useSession()
+  const accounts = api.account.getAccounts.useQuery()
+
+  console.log(accounts.data);
 
   if (sessionData !== null) {
     return (
