@@ -100,4 +100,22 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
+  getTasksCount: protectedProcedure
+    .query(({ ctx }) => {
+      return ctx.db.task.count({
+        where: { user: { id: ctx.session.user.id } }
+      })
+    }),
+  getTasksCountBasedOnStatus: protectedProcedure
+    .input(z.object({
+      done: z.boolean()
+    }))
+    .query(({ ctx, input }) => {
+      return ctx.db.task.count({
+        where: {
+          user: { id: ctx.session.user.id },
+          done: input.done
+        }
+      })
+    })
 });
