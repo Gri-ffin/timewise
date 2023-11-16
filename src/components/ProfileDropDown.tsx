@@ -1,4 +1,4 @@
-import { Calendar, Folder, LogOut, Plus, Settings, User } from "lucide-react"
+import { Folder, LogOut, Plus, Settings, User } from "lucide-react"
 import { BiFile, BiStats, BiTask } from "react-icons/bi"
 import { signOut } from "next-auth/react"
 import Link from 'next/link'
@@ -51,11 +51,29 @@ const ProfileDropDown = ({ username, imgUrl }: { username: string, imgUrl: strin
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          {/* Projects Section */}
-          <DropdownMenuItem>
-            <Folder className="mr-2 h-4 w-4" />
-            <span>Projects</span>
-          </DropdownMenuItem>
+          {/* Groups Section */}
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Folder className="mr-2 h-4 w-4" />
+              <span>Groups</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <Link href='/dashboard/group/add' >
+                  <DropdownMenuItem className="flex items-center cursor-pointer">
+                    <Plus className="mr-2 h-4 w-4" />
+                    <span>Add</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/dashboard/group'>
+                  <DropdownMenuItem className="flex items-center cursor-pointer">
+                    <BiFile className="mr-2 h-4 w-4" />
+                    <span>List</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
