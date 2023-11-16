@@ -19,7 +19,7 @@ const SignInPage: NextPage<Props> = ({ providers }) => {
         <meta name="description" content="Sign In/Login to Manage your time easily, efficiently and wisely" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-full flex flex-col items-center justify-center space-y-7">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center space-y-7">
         <h1 className="font-bold text-2xl">Let&apos;s dive in</h1>
         {/* we loop over the provider array and display each provider with its appropriate name and icon*/}
         {Object.values(providers).map((provider) => {
