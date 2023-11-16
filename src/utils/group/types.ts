@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-
 export const ICONSTYPES = ['Star', 'Folder', 'File', 'Flag', 'Power'] as const
 
 export const groupTaskSchema = z.object({
