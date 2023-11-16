@@ -23,4 +23,12 @@ export const groupRouter = createTRPCRouter({
         },
       });
     }),
+  getAll: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.db.group.findMany({
+        where: {
+          user: { id: ctx.session.user.id }
+        }
+      })
+    })
 })
