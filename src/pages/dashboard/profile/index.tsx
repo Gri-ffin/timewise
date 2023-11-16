@@ -12,7 +12,6 @@ import { Separator } from "~/components/ui/separator"
 import { authOptions } from "~/server/auth"
 import { api } from "~/utils/api"
 
-// TODO: Display user info in a card
 const ProfilePage = () => {
   const { data: sessionData } = useSession()
   const taskCount = api.task.getTasksCount.useQuery()
