@@ -20,5 +20,6 @@ export const taskFormSchema = z.object({
       required_error: 'A deadline is required.',
       invalid_type_error: "That's not a valid date."
     }
-  )
+  ),
+  groupId: z.string().optional()
 })
