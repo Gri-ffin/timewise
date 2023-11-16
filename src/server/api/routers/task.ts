@@ -13,18 +13,32 @@ export const taskRouter = createTRPCRouter({
       {
         title: z.string().min(5).max(40),
         memo: z.string().min(3).max(60),
-        deadline: z.date()
+        deadline: z.date(),
+        groupId: z.number().optional()
       }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.task.create({
-        data: {
-          title: input.title,
-          memo: input.memo,
-          deadline: input.deadline,
-          done: false,
-          user: { connect: { id: ctx.session.user.id } },
-        },
-      });
+      if (input.groupId) {
+        return ctx.db.task.create({
+          data: {
+            title: input.title,
+            memo: input.memo,
+            deadline: input.deadline,
+            done: false,
+            Group: { connect: { id: input.groupId } },
+            user: { connect: { id: ctx.session.user.id } },
+          },
+        });
+      } else {
+        return ctx.db.task.create({
+          data: {
+            title: input.title,
+            memo: input.memo,
+            deadline: input.deadline,
+            done: false,
+            user: { connect: { id: ctx.session.user.id } },
+          },
+        });
+      }
     }),
 
   // the procedure the update the task based on the id
@@ -98,6 +112,9 @@ export const taskRouter = createTRPCRouter({
             lt: input.finishDateFilter
           }
         },
+        include: {
+          Group: true
+        }
       });
     }),
   getTasksCount: protectedProcedure
