@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, X } from "lucide-react"
 import { BsExclamation } from "react-icons/bs"
 
 import AccessDenied from "~/components/AccessDenied"
@@ -22,13 +22,17 @@ import { Calendar } from '~/components/ui/calendar'
 import { api } from "~/utils/api"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { taskFormSchema } from "~/utils/task/types"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
+import { getGroupIcon } from "~/utils/helpers"
 
 
 
+//TODO: add the assign to group field or he can leave it null (maybe i should update prisma.schema)
 const TaskAdd = () => {
   const { data: sessionData } = useSession()
   // define the task mutation to create the task
   const taskMutation = api.task.create.useMutation()
+  const groupQuery = api.group.getAll.useQuery()
 
   // we use the schema we defined to check and define the form
   // to check and get the values of our form
@@ -38,13 +42,21 @@ const TaskAdd = () => {
     defaultValues: {
       title: '',
       memo: '',
-      deadline: new Date()
+      deadline: new Date(),
+      groupId: 'null'
     }
   })
 
   // we use the mutation to create the task in the db using trpc
   function onSubmit(values: z.infer<typeof taskFormSchema>) {
-    taskMutation.mutate(values)
+    let groupId: number | undefined;
+    if (values.groupId !== "null") {
+      groupId = Number(values.groupId)
+    } else {
+      groupId = undefined
+    }
+    const createTaskValues = { ...values, groupId }
+    taskMutation.mutate(createTaskValues)
   }
 
   if (sessionData != null) {
@@ -97,6 +109,34 @@ const TaskAdd = () => {
                       <FormMessage />
                     </FormItem>
                   )} />
+                {
+                  !groupQuery.isLoading && groupQuery.data!.length > 0 &&
+                  <FormField
+                    control={form.control}
+                    name="groupId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Group</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder='Select group or leave empty. . .' />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {groupQuery.data?.map(group => {
+                              let Icon = getGroupIcon(group.icon)
+                              return (
+                                <SelectItem className="items-center flex" key={group.id} value={group.id.toString()}><Icon className="inline mr-4" /> {group.name}</SelectItem>
+                              )
+                            })}
+                            <SelectItem value="null" className="items-center flex"><X className="inline mr-4" /> No Group</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                }
                 <FormField
                   control={form.control}
                   name="deadline"
