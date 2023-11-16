@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Task as TaskType } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
 import { CalendarIcon, Pen, Trash } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,7 +18,10 @@ import { Button } from '~/components/ui/button'
 import { api } from "~/utils/api"
 import { Checkbox } from "../ui/checkbox"
 
-const Task = ({ data }: { data: TaskType }) => {
+type Data = Prisma.TaskGetPayload<{ include: { Group: true } }>
+
+// TODO: modify edit to add group edit
+const Task = ({ data }: { data: Data }) => {
   // close the dialog when the task is updated
   const [open, setOpen] = useState<boolean>(false)
   // Create the mutation to delete the tasks
@@ -83,7 +86,7 @@ const Task = ({ data }: { data: TaskType }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center justify-center space-x-3">
               <Checkbox defaultChecked={data.done} onCheckedChange={handleCheckBoxChange} id="task" disabled={doneStatusMutation.isLoading} />
-              <label className="capitalize font-semibold peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="task">{data.title}</label>
+              <label className="capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="task">{data.title}</label>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
               <DropdownMenu modal={false}>
@@ -200,7 +203,11 @@ const Task = ({ data }: { data: TaskType }) => {
               </DialogContent>
             </Dialog>
           </div>
-          <p className="text-gray-500">{data.memo}</p>
+          {data.Group ?
+            <p className="italic text-sm text-muted-foreground py-1">Belongs to {data.Group.name}</p> :
+            <p className="italic text-sm text-muted-foreground py-1">Belongs to No Group</p>
+          }
+          <p className="text-gray-300/80">Memo: <span className="text-zinc-500/90 ">{data.memo}</span></p>
         </>
       }
     </div>
