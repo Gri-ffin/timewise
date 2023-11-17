@@ -60,7 +60,7 @@ const TaskPage = () => {
       <>
         <Head>
           <title>TimeWise | Tasks Lists</title>
-          <meta name="description" content="Add tasks and view them based on day, week, month or year." />
+          <meta name="description" content="View tasks and view them based on day, week, month or year." />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div>
