@@ -26,7 +26,7 @@ const DateNavigationMenu = ({ changePeriod, period }: { changePeriod: (period: P
           // on click of the button switch the period and tasks to display
           // also change the background of the button to hint to the user the current period
           <NavigationMenuItem key={navigationItem.period} onClick={() => changePeriod(navigationItem.period)}>
-            <Button className={`${navigationItem.period === period && 'bg-gray-600 text-white hover:text-black'}`}>
+            <Button variant='outline' className={`${navigationItem.period === period && 'bg-gray-600 text-white hover:text-black'}`}>
               {navigationItem.name}
             </Button>
           </NavigationMenuItem>
