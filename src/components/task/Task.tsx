@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Prisma } from "@prisma/client"
-import { CalendarIcon, Pen, Trash } from "lucide-react"
+import { CalendarIcon, Pen, Trash, X } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from 'date-fns'
@@ -17,10 +17,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Button } from '~/components/ui/button'
 import { api } from "~/utils/api"
 import { Checkbox } from "../ui/checkbox"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { getGroupIcon } from "~/utils/helpers"
 
 type Data = Prisma.TaskGetPayload<{ include: { Group: true } }>
 
-// TODO: modify edit to add group edit
 const Task = ({ data }: { data: Data }) => {
   // close the dialog when the task is updated
   const [open, setOpen] = useState<boolean>(false)
@@ -28,6 +29,8 @@ const Task = ({ data }: { data: Data }) => {
   const deleteMutation = api.task.delete.useMutation()
   // Create the update muation to update the task
   const updateMutation = api.task.update.useMutation()
+  // get all the groups that belongs to a user
+  const groupQuery = api.group.getAll.useQuery()
   // the handle done status mutation
   const doneStatusMutation = api.task.changeStatusDone.useMutation()
   // we use the schema we defined to check and define the form
@@ -38,13 +41,23 @@ const Task = ({ data }: { data: Data }) => {
     defaultValues: {
       title: data.title,
       memo: data.memo,
-      deadline: data.deadline
+      deadline: data.deadline,
+      groupId: data.groupId ? data.groupId.toString() : 'null'
     }
   })
 
   // we use the mutation to create the task in the db using trpc
   function updateTask(values: z.infer<typeof taskFormSchema>) {
-    updateMutation.mutate({ ...values, id: data.id }, {
+    let groupId: number | undefined;
+    if (values.groupId !== "null") {
+      groupId = Number(values.groupId)
+    } else {
+      groupId = undefined
+    }
+    const updateTaskValues = { ...values, groupId, id: data.id }
+    console.log(updateTaskValues);
+
+    updateMutation.mutate(updateTaskValues, {
       onSuccess: () => {
         // refresh the task array to update the front
         utils.task.invalidate()
@@ -147,6 +160,33 @@ const Task = ({ data }: { data: Data }) => {
                           <FormMessage />
                         </FormItem>
                       )} />
+                    {
+                      !groupQuery.isLoading && groupQuery.data!.length > 0 &&
+                      <FormField
+                        control={form.control}
+                        name="groupId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Group</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder='Select group or leave empty. . .' />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {groupQuery.data?.map(group => {
+                                  let Icon = getGroupIcon(group.icon)
+                                  return (
+                                    <SelectItem className="items-center flex" key={group.id} value={group.id.toString()}><Icon className="inline mr-4" /> {group.name}</SelectItem>
+                                  )
+                                })}
+                                <SelectItem value="null" className="items-center flex"><X className="inline mr-4" /> No Group</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormItem>
+                        )}
+                      />}
                     <FormField
                       control={form.control}
                       name="deadline"
