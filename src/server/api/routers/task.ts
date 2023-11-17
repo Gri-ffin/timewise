@@ -47,23 +47,39 @@ export const taskRouter = createTRPCRouter({
       id: z.number(),
       title: z.string().min(5).max(40),
       memo: z.string().min(3).max(60),
-      deadline: z.date()
-
+      deadline: z.date(),
+      groupId: z.number().optional()
     }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.task.update({
-        where: {
-          user: { id: ctx.session.user.id },
-          id: input.id,
-        },
-        data: {
-          title: input.title,
-          memo: input.memo,
-          deadline: input.deadline
-        }
-      })
+      if (input.groupId) {
+        return ctx.db.task.update({
+          where: {
+            user: { id: ctx.session.user.id },
+            id: input.id,
+          },
+          data: {
+            title: input.title,
+            memo: input.memo,
+            deadline: input.deadline,
+            Group: { connect: { id: input.groupId } },
+          }
+        });
+      } else {
+        return ctx.db.task.update({
+          where: {
+            user: { id: ctx.session.user.id },
+            id: input.id,
+          },
+          data: {
+            title: input.title,
+            memo: input.memo,
+            deadline: input.deadline,
+            // we disconnect the Group from the task, prisma set the id to null
+            Group: { disconnect: true },
+          }
+        });
+      }
     }),
-
   // the procedure the delete the task based on the id
   delete: protectedProcedure
     .input(z.object({
