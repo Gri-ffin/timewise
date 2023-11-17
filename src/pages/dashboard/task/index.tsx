@@ -74,7 +74,7 @@ const TaskPage = () => {
               <div className="flex flex-row items-center justify-center space-x-7">
                 {/* this switch to the previous day, week, month or year*/}
                 <ArrowLeftIcon onClick={() => switchDate('substract')} className="cursor-pointer" />
-                <h3 className="text-2xl text-center">
+                <h3 className="text-2xl text-center font-semibold">
                   {
                     // this displays the day name for example Sunday, Monday ...
                     period === 'day' ? days[date.day()] :

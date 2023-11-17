@@ -99,7 +99,7 @@ const Task = ({ data }: { data: Data }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center justify-center space-x-3">
               <Checkbox defaultChecked={data.done} onCheckedChange={handleCheckBoxChange} id="task" disabled={doneStatusMutation.isLoading} />
-              <label className="capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor="task">{data.title}</label>
+              <label className="capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold" htmlFor="task">{data.title}</label>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
               <DropdownMenu modal={false}>
@@ -244,10 +244,10 @@ const Task = ({ data }: { data: Data }) => {
             </Dialog>
           </div>
           {data.Group ?
-            <p className="italic text-sm text-muted-foreground py-1">Belongs to {data.Group.name}</p> :
-            <p className="italic text-sm text-muted-foreground py-1">Belongs to No Group</p>
+            <p className="italic text-sm text-muted-foreground py-1 font-semibold">Belongs to {data.Group.name}</p> :
+            <p className="italic text-sm text-muted-foreground py-1 font-semibold">Belongs to No Group</p>
           }
-          <p className="text-gray-300/80">Memo: <span className="text-zinc-500/90 ">{data.memo}</span></p>
+          <p className="text-gray-300/80 font-semibold">Memo: <span className="text-zinc-500/90 font-medium">{data.memo}</span></p>
         </>
       }
     </div>
