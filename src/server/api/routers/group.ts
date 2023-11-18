@@ -6,6 +6,7 @@ import {
 } from "~/server/api/trpc";
 import { ICONSTYPES } from '~/utils/group/types';
 
+// add a delete and eedit procedure
 export const groupRouter = createTRPCRouter({
   // the precedure the create the group 
   create: protectedProcedure
@@ -30,5 +31,17 @@ export const groupRouter = createTRPCRouter({
           user: { id: ctx.session.user.id }
         }
       })
+    }),
+  getAllWithTasks: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.db.group.findMany({
+        where: {
+          user: { id: ctx.session.user.id }
+        },
+        include: {
+          Task: true
+        }
+      })
     })
+
 })
