@@ -2,15 +2,13 @@
 # TimeWise
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/gri-ffin/timewise.svg)](https://github.com/gri-ffin/timewise/stargazers)
 
-**TimeWise** is a web app that will help you manage your project and tasks, while also helping you track and manage the time wasted.
+**TimeWise** is a web application that will help you manage your project and tasks, while also helping you track and manage the time wasted.
 ---
 
 ## Table of Contents
 
 - [Features](#features)
-- [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -30,24 +28,18 @@
 
 ---
 
-## Demo
-
-[Insert link to your live demo or GIFs/images showcasing your app]
-
----
-
 ## Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/gri-ffin/timewise.git
 
 # Navigate to the project directory
 cd yourproject
 
 # Install dependencies
 
-npm install
+pnpm install
 
 # Start the app
-npm start
+pnpm run dev
